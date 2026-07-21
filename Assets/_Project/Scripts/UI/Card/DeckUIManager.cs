@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using _Project.Scripts.Data.Card;
+using _Project.Scripts.Gameplay.Card;
 using _Project.Scripts.Gameplay.CardDeck;
 using UnityEngine;
 
@@ -63,7 +63,7 @@ namespace _Project.Scripts.UI.Card
         /// <summary>
         /// Event listener for when the logic layer draws a card.
         /// </summary>
-        private void HandleCardDrawn(CardData data)
+        private void HandleCardDrawn(CardInstance instance)
         {
             if (_cardPool.Count == 0)
             {
@@ -75,7 +75,7 @@ namespace _Project.Scripts.UI.Card
             CardView availableCard = _cardPool.Dequeue();
             
             // Prepare its data and turn it on
-            availableCard.Initialize(data, this);
+            availableCard.Initialize(instance, this);
             availableCard.gameObject.SetActive(true);
             availableCard.transform.SetAsLastSibling(); // Ensure it appears on the right side of the layout
             
@@ -85,16 +85,18 @@ namespace _Project.Scripts.UI.Card
         /// <summary>
         /// Event listener for when the logic layer discards a card.
         /// </summary>
-        private void HandleCardDiscarded(CardData data)
+        private void HandleCardDiscarded(CardInstance instance)
         {
-            // Find the visual card currently holding this data
-            // Note: If you have duplicate cards, this finds the first match. 
-            // For a perfectly robust system later, matching by a unique instance ID is better.
-            CardView cardToReturn = _activeCardsInHand.Find(c => c.CurrentData == data);
+            // Find the UI card that matches the exact unique InstanceID
+            CardView cardToReturn = _activeCardsInHand.Find(c => c.CurrentInstance.InstanceID == instance.InstanceID);
             
             if (cardToReturn != null)
             {
                 ReturnCardToPool(cardToReturn);
+            }
+            else
+            {
+                Debug.LogWarning($"Failed to find UI for card '{instance.BaseData.cardName}' with ID {instance.InstanceID}");
             }
         }
 
@@ -114,11 +116,7 @@ namespace _Project.Scripts.UI.Card
         public void PlayCardFromUI(CardView cardViewPlayed)
         {
             // Pass the request down to the logic layer
-            deckManager.DiscardCard(cardViewPlayed.CurrentData);
-            
-            // Note: The UI doesn't return the card to the pool here directly!
-            // It waits for the deckManager.OnCardDiscarded event to fire and call HandleCardDiscarded.
-            // This ensures the UI is ALWAYS a slave to the Logic state.
+            deckManager.DiscardCard(cardViewPlayed.CurrentInstance);
         }
 
         #endregion

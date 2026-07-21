@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using _Project.Scripts.Data.Card;
+using _Project.Scripts.Gameplay.Card;
 using UnityEngine;
 
 namespace _Project.Scripts.Gameplay.CardDeck
@@ -12,15 +13,15 @@ namespace _Project.Scripts.Gameplay.CardDeck
         public List<CardData> startingDeck = new List<CardData>();
 
         [Header("Runtime Piles")]
-        public List<CardData> drawPile = new List<CardData>();
-        public List<CardData> hand = new List<CardData>();
-        public List<CardData> discardPile = new List<CardData>();
+        public List<CardInstance> drawPile = new List<CardInstance>();
+        public List<CardInstance> hand = new List<CardInstance>();
+        public List<CardInstance> discardPile = new List<CardInstance>();
 
         [Header("Rules")]
         public int maxHandSize = 5;
 
-        public event Action<CardData> OnCardDrawn;
-        public event Action<CardData> OnCardDiscarded;
+        public event Action<CardInstance> OnCardDrawn;
+        public event Action<CardInstance> OnCardDiscarded;
         public event Action OnDeckReshuffled;
 
         private void Start()
@@ -37,8 +38,12 @@ namespace _Project.Scripts.Gameplay.CardDeck
             hand.Clear();
             discardPile.Clear();
 
-            // Copy cards from the starting deck to the draw pile
-            drawPile.AddRange(startingDeck);
+            // Convert the base ScriptableObjects into unique CardInstances
+            foreach (CardData data in startingDeck)
+            {
+                drawPile.Add(new CardInstance(data));
+            }
+            
             ShuffleDeck(drawPile);
             
             Debug.Log("The deck was successfully initialized and shuffled.");
@@ -64,20 +69,20 @@ namespace _Project.Scripts.Gameplay.CardDeck
                 }
 
                 // Take the top card (last index) from the Draw Pile.
-                CardData drawnCard = drawPile[^1];
+                CardInstance drawnCard = drawPile[^1];
                 drawPile.RemoveAt(drawPile.Count - 1);
                 
                 hand.Add(drawnCard);
                 OnCardDrawn?.Invoke(drawnCard);
                 
-                Debug.Log($"Draw a card: {drawnCard.cardName}");
+                Debug.Log($"Draw a card: {drawnCard.BaseData.cardName}");
             }
         }
 
         /// <summary>
         /// Discard a card from your hand to the Discard Pile.
         /// </summary>
-        public void DiscardCard(CardData cardToDiscard)
+        public void DiscardCard(CardInstance cardToDiscard)
         {
             if (hand.Contains(cardToDiscard))
             {
@@ -85,7 +90,7 @@ namespace _Project.Scripts.Gameplay.CardDeck
                 discardPile.Add(cardToDiscard);
                 
                 OnCardDiscarded?.Invoke(cardToDiscard);
-                Debug.Log($"Discard cards: {cardToDiscard.cardName}");
+                Debug.Log($"Discard cards: {cardToDiscard.BaseData.cardName}");
             }
             else
             {
@@ -100,13 +105,13 @@ namespace _Project.Scripts.Gameplay.CardDeck
         {
             if (handIndex >= 0 && handIndex < hand.Count)
             {
-                CardData cardToDiscard = hand[handIndex];
+                CardInstance cardToDiscard = hand[handIndex];
             
                 hand.RemoveAt(handIndex);
                 discardPile.Add(cardToDiscard);
             
                 OnCardDiscarded?.Invoke(cardToDiscard);
-                Debug.Log($"Discarded card at index {handIndex}: {cardToDiscard.cardName}");
+                Debug.Log($"Discarded card at index {handIndex}: {cardToDiscard.BaseData.cardName}");
             }
             else
             {
@@ -124,7 +129,7 @@ namespace _Project.Scripts.Gameplay.CardDeck
             // Looping backwards ensures we don't skip any elements or get an index out of bounds error.
             for (int i = hand.Count - 1; i >= 0; i--)
             {
-                CardData cardToDiscard = hand[i];
+                CardInstance cardToDiscard = hand[i];
             
                 // Utilize the existing DiscardCard method to handle moving the data and triggering UI events
                 DiscardCard(cardToDiscard);
@@ -149,7 +154,7 @@ namespace _Project.Scripts.Gameplay.CardDeck
         /// <summary>
         /// Fisher-Yates algorithm for shuffling lists.
         /// </summary>
-        private void ShuffleDeck(List<CardData> deckToShuffle)
+        private void ShuffleDeck(List<CardInstance> deckToShuffle)
         {
             for (int i = deckToShuffle.Count - 1; i > 0; i--)
             {

@@ -1,4 +1,5 @@
 using _Project.Scripts.Data.Card;
+using _Project.Scripts.Gameplay.Card;
 using TMPro;
 using UnityEngine;
 
@@ -12,21 +13,21 @@ namespace _Project.Scripts.UI.Card
         public TextMeshProUGUI valueText;
 
         // Stores the data currently represented by this UI card
-        public CardData CurrentData { get; private set; }
+        public CardInstance CurrentInstance { get; private set; }
     
         private DeckUIManager _uiManager;
 
         /// <summary>
         /// Initializes the visual representation of the card based on the provided data.
         /// </summary>
-        public void Initialize(CardData data, DeckUIManager manager)
+        public void Initialize(CardInstance instance, DeckUIManager manager)
         {
-            CurrentData = data;
+            CurrentInstance = instance;
             _uiManager = manager;
 
-            nameText.text = data.cardName;
-            costText.text = data.manaCost.ToString();
-            valueText.text = data.effectValue.ToString();
+            nameText.text = instance.BaseData.cardName;
+            costText.text = instance.BaseData.manaCost.ToString();
+            valueText.text = instance.BaseData.effectValue.ToString();
         }
 
         /// <summary>
