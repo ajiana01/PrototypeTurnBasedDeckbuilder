@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace _Project.Scripts.Data.Card
@@ -9,6 +10,7 @@ namespace _Project.Scripts.Data.Card
         Heal
     }
 
+    [Serializable]
     [CreateAssetMenu(fileName = "NewCard", menuName = "Data/CardData")]
     public class CardData : ScriptableObject
     {

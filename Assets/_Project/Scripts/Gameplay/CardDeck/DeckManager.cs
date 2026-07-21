@@ -24,15 +24,11 @@ namespace _Project.Scripts.Gameplay.CardDeck
         public event Action<CardInstance> OnCardDiscarded;
         public event Action OnDeckReshuffled;
 
-        private void Start()
-        {
-            InitializeDeck();
-        }
 
         /// <summary>
         /// Set up the Draw Pile at the start of the game.
         /// </summary>
-        private void InitializeDeck()
+        public void InitializeDeck()
         {
             drawPile.Clear();
             hand.Clear();

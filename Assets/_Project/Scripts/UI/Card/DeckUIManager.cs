@@ -27,7 +27,6 @@ namespace _Project.Scripts.UI.Card
         private void Start()
         {
             InitializePool();
-
             deckManager.OnCardDrawn += HandleCardDrawn;
             deckManager.OnCardDiscarded += HandleCardDiscarded;
         }
