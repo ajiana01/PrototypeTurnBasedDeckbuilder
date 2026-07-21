@@ -1,0 +1,9 @@
+{
+    "name": "Project.Data",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "autoReferenced": true
+}

@@ -1,0 +1,9 @@
+{
+    "name": "Project.Core",
+    "rootNamespace": "",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "autoReferenced": true
+}
