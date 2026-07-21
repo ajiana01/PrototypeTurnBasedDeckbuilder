@@ -1,9 +1,16 @@
 {
     "name": "Project.Gameplay",
     "rootNamespace": "",
-    "references": [],
+    "references": [
+        "GUID:763b9c23aa588894997b4e6a36651a88"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
-    "autoReferenced": true
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
