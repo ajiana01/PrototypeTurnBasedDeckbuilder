@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using _Project.Scripts.Gameplay.Card;
 using _Project.Scripts.Gameplay.CardDeck;
+using _Project.Scripts.Gameplay.GameState;
 using UnityEngine;
 
 namespace _Project.Scripts.UI.Card
@@ -10,6 +11,7 @@ namespace _Project.Scripts.UI.Card
         [Header("Core Logic Reference")]
         [Tooltip("Reference to the logic manager. Keep this separate to maintain clean architecture.")]
         public DeckManager deckManager;
+        public GameStateManager gameStateManager;
 
         [Header("UI & Pooling Setup")]
         public GameObject cardPrefab;
@@ -115,7 +117,8 @@ namespace _Project.Scripts.UI.Card
         public void PlayCardFromUI(CardView cardViewPlayed)
         {
             // Pass the request down to the logic layer
-            deckManager.DiscardCard(cardViewPlayed.CurrentInstance);
+            gameStateManager.TryPlayCard(cardViewPlayed.CurrentInstance);
+            //deckManager.DiscardCard(cardViewPlayed.CurrentInstance);
         }
 
         #endregion
