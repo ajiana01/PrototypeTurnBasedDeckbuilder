@@ -1168,7 +1168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deckManager: {fileID: 1422416285}
-  gameStateManager: {fileID: 636853003}
+  gameStateManager: {fileID: 0}
   cardPrefab: {fileID: 4678208751488832104, guid: 03ddca088daba514099ec20d4e34084b, type: 3}
   handContainer: {fileID: 845861792}
   poolSize: 10
@@ -1792,8 +1792,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deckManager: {fileID: 1422416285}
-  playerHealth: {fileID: 611748085}
-  enemyHealth: {fileID: 231199235}
+  playerHealth: {fileID: 0}
+  enemyHealth: {fileID: 0}
 --- !u!4 &636853004
 Transform:
   m_ObjectHideFlags: 0

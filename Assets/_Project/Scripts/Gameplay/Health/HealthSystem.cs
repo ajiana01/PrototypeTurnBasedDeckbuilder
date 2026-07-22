@@ -17,6 +17,20 @@ namespace _Project.Scripts.Gameplay.Health
             currentHealth = maxHealth;
             OnHealthChanged?.Invoke();
         }
+        
+        /// <summary>
+        /// Initializes health dynamically. Used by Spawners to apply EnemyData stats.
+        /// </summary>
+        public void InitializeHealth(int newMaxHealth)
+        {
+            maxHealth = newMaxHealth;
+            currentHealth = maxHealth;
+        
+            // Trigger event so the UI updates immediately
+            OnHealthChanged?.Invoke();
+        
+            Debug.Log($"{gameObject.name} initialized with {maxHealth} HP.");
+        }
 
         public void TakeDamage(int damageAmount)
         {
